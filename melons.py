@@ -3,8 +3,8 @@
 class AbstractMelonOrder(object):
     """ Parent class for melon orders. """
 
-    def __init__(self, species, qty, country_code = None): #Country_code may need to be optional param
-
+    #Country code is set to optional param because domestic order does not have one
+    def __init__(self, species, qty, country_code = None): 
 
         self.species = species
         self.qty = qty
@@ -15,7 +15,17 @@ class AbstractMelonOrder(object):
         """Calculate price."""
 
         base_price = 5
+
+        #Christmas melon price is 1.5 times more
+        if self.species == 'Christmas melon':
+            base_price *= 1.5
+
         total = (1 + self.tax) * self.qty * base_price
+
+        #$3 surcharge for international orders less than 10 melons
+        if self.qty < 10 and self.order_type == 'international':
+            total = total + 3
+
         return total
 
     def mark_shipped(self):
