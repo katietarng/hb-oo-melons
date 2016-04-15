@@ -1,4 +1,7 @@
 """This file should have our order classes in it."""
+from random import randint
+
+
 
 class AbstractMelonOrder(object):
     """ Parent class for melon orders. """
@@ -11,10 +14,18 @@ class AbstractMelonOrder(object):
         self.shipped = False
         self.country_code = country_code
 
+    def get_base_price(self):
+        """Get random base price."""
+
+        base_price = randint(5,9)
+
+        return base_price
+
+
     def get_total(self):
         """Calculate price."""
 
-        base_price = 5
+        base_price = self.get_base_price()
 
         #Christmas melon price is 1.5 times more
         if self.species == 'Christmas melon':
@@ -52,12 +63,14 @@ class InternationalMelonOrder(AbstractMelonOrder):
 
         return self.country_code
 
-# class GovernmentMelonOrder(AbstractMelonOrder):
-#     """A Government melon order."""
 
-#     order_type = "government"
-#     tax = 0.0
-#     passed_inspection = False
+class GovernmentMelonOrder(AbstractMelonOrder):
+    """A Government melon order."""
 
-#     def mark_inspection(self):
-#         passed_inspection = True
+    order_type = "government"
+    tax = 0.0
+    passed_inspection = False
+
+    def mark_inspection(self):
+        """Set inspection status to true."""
+        self.passed_inspection = True
