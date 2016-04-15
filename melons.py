@@ -1,7 +1,6 @@
 """This file should have our order classes in it."""
 from random import randint
-
-
+from datetime import datetime
 
 class AbstractMelonOrder(object):
     """ Parent class for melon orders. """
@@ -15,12 +14,20 @@ class AbstractMelonOrder(object):
         self.country_code = country_code
 
     def get_base_price(self):
-        """Get random base price."""
+        """Get random base price. Add splurge pricing for weekday mornings."""
 
         base_price = randint(5,9)
 
-        return base_price
+        #Get current time and turn it into a tuple so that we can index
+        current_time = datetime.now()
+        current_time = current_time.timetuple()
 
+        #In current time tuple, hour = index[3] and day = index[6]
+        #Used range to define time and day bounds: 8am-11am, M-F
+        if current_time[3] in range(8,12) and current_time[6] in range(0,5):
+            base_price += 4
+
+        return base_price
 
     def get_total(self):
         """Calculate price."""
@@ -74,3 +81,5 @@ class GovernmentMelonOrder(AbstractMelonOrder):
     def mark_inspection(self):
         """Set inspection status to true."""
         self.passed_inspection = True
+
+
